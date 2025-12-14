@@ -1,4 +1,7 @@
 
+using System.Net.Http.Headers;
+using Translator.Services;
+
 namespace Translator
 {
     public class Program
@@ -13,6 +16,14 @@ namespace Translator
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // configure HttpClient for TranslatorService
+            builder.Services.AddHttpClient<TranslatorService>((sp, client) =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config["OpenAI:Key"]);
+            });
+
 
             var app = builder.Build();
 
