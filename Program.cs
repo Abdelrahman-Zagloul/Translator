@@ -26,15 +26,21 @@ namespace Translator
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config["OpenAI:Key"]);
             });
 
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("MyCORS", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseCors("MyCORS");
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseExceptionHandler(appError =>
             {
