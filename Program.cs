@@ -20,7 +20,7 @@ namespace Translator
             builder.Services.AddSwaggerGen();
 
             // configure HttpClient for TranslatorService
-            builder.Services.AddHttpClient<TranslatorService>((sp, client) =>
+            builder.Services.AddHttpClient<ITranslatorService, TranslatorService>((sp, client) =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config["OpenAI:Key"]);
@@ -56,7 +56,7 @@ namespace Translator
             app.UseAuthorization();
 
 
-            app.MapPost("/translate", async (TranslatorService translatorService, [FromBody] TranslateRequest request) =>
+            app.MapPost("/translate", async (ITranslatorService translatorService, [FromBody] TranslateRequest request) =>
             {
                 var result = await translatorService.TranslateAsync(request);
                 return result == null ?

@@ -4,7 +4,7 @@ using Translator.DTOs;
 
 namespace Translator.Services
 {
-    public class TranslatorService
+    public class TranslatorService : ITranslatorService
     {
         private readonly HttpClient _httpClient;
 
