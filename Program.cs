@@ -55,6 +55,7 @@ namespace Translator
 
 
             app.MapTranslateEndpoints();
+            app.MapLanguagesEndpoints();
             app.MapControllers();
 
             app.Run();
