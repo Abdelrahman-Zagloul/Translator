@@ -1,7 +1,5 @@
-
-using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using Translator.DTOs;
+using Translator.Endpoints;
 using Translator.Services;
 
 namespace Translator
@@ -62,16 +60,10 @@ namespace Translator
             app.UseAuthorization();
 
 
-            app.MapPost("/translate", async (ITranslatorService translatorService, [FromBody] TranslateRequest request) =>
-            {
-                var result = await translatorService.TranslateAsync(request);
-                return result == null ?
-                Results.BadRequest("Failed To Translate") :
-                Results.Ok(new { TranslatedText = result });
-            });
+            app.MapTranslateEndpoints();
+            app.MapLanguagesEndpoints();
 
             app.MapControllers();
-
             app.Run();
         }
     }
